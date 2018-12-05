@@ -14,7 +14,7 @@
         "cocos2d-x",
         "plugin",
         "admob",
-        "firebase"
+        "firebase",
         "sdkbox",
         "sdkbar",
         "ecosystem:cocos2d-x"
