@@ -1,15 +1,15 @@
 
 sdkbox.copy_files(['app'], PLUGIN_PATH, ANDROID_STUDIO_PROJECT_DIR)
-sdkbox.copy_files(['ios'], PLUGIN_PATH, IOS_PROJECT_DIR)
+#sdkbox.copy_files(['ios'], PLUGIN_PATH, IOS_PROJECT_DIR)
 sdkbox.copy_files(['Classes/AdMob.cpp', 'Classes/AdMob.h', 'Classes/AdMob.hpp', 'Classes/AdMob.mm'], PLUGIN_PATH, COCOS_CLASSES_DIR)
 sdkbox.copy_files(['ios/firebase_admob.framework', 'ios/GoogleMobileAds.framework'], PLUGIN_PATH, IOS_PROJECT_DIR)
 
 sdkbox.android_add_static_libraries(['admob'])
 sdkbox.android_add_calls(['import-module, ./admob'])
-sdkbar.gradle_dependencies(["compile 'com.google.firebase:firebase-ads:15.0.1'", "compile 'com.google.ads.mediation:chartboost:7.0.1.0'", "compile 'com.google.ads.mediation:unity:2.2.0.0'", "compile 'com.google.ads.mediation:facebook:4.27.1.0'", "compile 'com.google.android.gms:play-services-ads:15.0.1'", "compile 'com.google.android.ads:mediation-test-suite:0.9.0'"])
+sdkbar.gradle_dependencies(["implementation 'com.google.firebase:firebase-ads:16.+'", "implementation 'com.google.ads.mediation:chartboost:7.3.0.0'", "implementation 'com.google.ads.mediation:unity:3.0.0.0'", "implementation 'com.unity3d.ads:unity-ads:3.0.0'", "implementation 'com.google.ads.mediation:facebook:5.1.0.0'", "implementation 'com.facebook.android:audience-network-sdk:5.1.0'", "compile 'com.google.android.gms:play-services-ads:17.1.2'", "compile 'com.google.android.ads:mediation-test-suite:0.9.2'"])
 
 sdkbox.xcode_add_sources(['AdMob.mm'])
-sdkbox.xcode_add_frameworks(['firebase_admob.framework', 'GoogleMobileAds.framework', 'GLKit.framework', 'MessageUI.framework', 'GLKit.framework'])
+sdkbox.xcode_add_frameworks(['firebase_admob.framework', 'GoogleMobileAds.framework', 'GLKit.framework', 'MessageUI.framework'])
 
 sdkbar.appDelegateInject({
     'marker': SDKBOX_PACKAGE_NAME,
