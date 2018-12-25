@@ -13,6 +13,7 @@
 
 #include "scripting/js-bindings/manual/cocos2d_specifics.hpp"
 #import <StoreKit/StoreKit.h>
+#import <GoogleMobileAdsMediationTestSuite/GoogleMobileAdsMediationTestSuite.h>
 
 static std::string ApplicationId;
 static std::vector<std::string> testDeviceIds;
@@ -50,17 +51,11 @@ static bool jsb_admob_init(JSContext *cx, uint32_t argc, jsval *vp)
         ok &= jsval_to_std_string(cx, arg0Val, &advertisingId);
 
         printLog("[AdMob] Init plugin");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-        // Initialize Firebase for Android.
-        firebase::App* app = firebase::App::Create(firebase::AppOptions(), cocos2d::JniHelper::getEnv(), cocos2d::JniHelper::getActivity());
-        // Initialize AdMob.
-        firebase::admob::Initialize(*app, advertisingId.c_str());
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         // Initialize Firebase for iOS.
         firebase::App* app = firebase::App::Create(firebase::AppOptions());
         // Initialize AdMob.
         firebase::admob::Initialize(*app, advertisingId.c_str());
-#endif
+        ApplicationId = advertisingId;
         rec.rval().set(JSVAL_TRUE);
         return true;
     } else {
@@ -78,20 +73,9 @@ static bool jsb_admob_launch_test_suite(JSContext *cx, uint32_t argc, jsval *vp)
     if(argc == 0) {
         if(ApplicationId.size() > 0) {
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-            cocos2d::JniMethodInfo methodInfo;
-            if (! cocos2d::JniHelper::getStaticMethodInfo(methodInfo, "com/google/android/ads/mediationtestsuite/MediationTestSuite", "launch", "(Landroid/content/Context;Ljava/lang/String;)V")) {
-                rec.rval().set(JSVAL_FALSE);
-                return false;
-            }
-            jstring str = methodInfo.env->NewStringUTF(ApplicationId.c_str());
-            methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, cocos2d::JniHelper::getActivity(), str);
-            methodInfo.env->DeleteLocalRef(str);
-            methodInfo.env->DeleteLocalRef(methodInfo.classID);
-#endif
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-            // TODO
-#endif
+            NSString *appID = [NSString stringWithUTF8String:ApplicationId.c_str()];
+            UIViewController *vc = [UIApplication.sharedApplication.keyWindow rootViewController];
+            [GoogleMobileAdsMediationTestSuite presentWithAppID:appID onViewController:vc delegate:nil];
 
             rec.rval().set(JSVAL_TRUE);
         } else {
@@ -118,7 +102,7 @@ static bool jsb_admob_add_test_device(JSContext *cx, uint32_t argc, jsval *vp)
         ok &= jsval_to_std_string(cx, arg0Val, &deviceId);
         testDeviceIds.push_back(deviceId);
 
-        my_ad_request.test_device_id_count = testDeviceIds.size();
+        my_ad_request.test_device_id_count = (int)testDeviceIds.size();
         for(int i=0; i<testDeviceIds.size(); i++) {
             testingDevices[i] = testDeviceIds[i].c_str();
             printLog(testDeviceIds[i].c_str());

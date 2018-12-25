@@ -9,9 +9,6 @@
 #include "firebase/admob.h"
 #include "firebase/admob/banner_view.h"
 #include "firebase/admob/interstitial_ad.h"
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#import <StoreKit/StoreKit.h>
-#endif
 
 static std::string ApplicationId;
 static std::vector<std::string> testDeviceIds;
@@ -26,14 +23,8 @@ static void printLog(const char* str) {
 }
 
 firebase::admob::AdParent getAdParent() {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     // Returns the Android Activity.
     return cocos2d::JniHelper::getActivity();
-#endif
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    // Returns the iOS RootViewController's main view (i.e. the EAGLView).
-    return (id)cocos2d::Director::getInstance()->getOpenGLView()->getEAGLView();
-#endif
 }
 
 ///////////////////////////////////////
@@ -81,7 +72,6 @@ static bool jsb_admob_launch_test_suite(JSContext *cx, uint32_t argc, jsval *vp)
     if(argc == 0) {
         if(ApplicationId.size() > 0) {
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
             cocos2d::JniMethodInfo methodInfo;
             if (! cocos2d::JniHelper::getStaticMethodInfo(methodInfo, "com/google/android/ads/mediationtestsuite/MediationTestSuite", "launch", "(Landroid/content/Context;Ljava/lang/String;)V")) {
                 rec.rval().set(JSVAL_FALSE);
@@ -91,11 +81,6 @@ static bool jsb_admob_launch_test_suite(JSContext *cx, uint32_t argc, jsval *vp)
             methodInfo.env->CallStaticVoidMethod(methodInfo.classID, methodInfo.methodID, cocos2d::JniHelper::getActivity(), str);
             methodInfo.env->DeleteLocalRef(str);
             methodInfo.env->DeleteLocalRef(methodInfo.classID);
-#endif
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-            // TODO
-#endif
-
             rec.rval().set(JSVAL_TRUE);
         } else {
             rec.rval().set(JSVAL_FALSE);
