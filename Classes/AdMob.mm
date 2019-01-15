@@ -15,7 +15,7 @@
 #import <StoreKit/StoreKit.h>
 #import <GoogleMobileAdsMediationTestSuite/GoogleMobileAdsMediationTestSuite.h>
 
-static std::string ApplicationId;
+std::string ApplicationId;
 static std::vector<std::string> testDeviceIds;
 static const char* testingDevices[100];
 static firebase::admob::AdRequest my_ad_request = {};
@@ -57,30 +57,6 @@ static bool jsb_admob_init(JSContext *cx, uint32_t argc, jsval *vp)
         firebase::admob::Initialize(*app, advertisingId.c_str());
         ApplicationId = advertisingId;
         rec.rval().set(JSVAL_TRUE);
-        return true;
-    } else {
-        JS_ReportError(cx, "Invalid number of arguments");
-        return false;
-    }
-}
-
-static bool jsb_admob_launch_test_suite(JSContext *cx, uint32_t argc, jsval *vp)
-{
-    printLog("jsb_admob_launch_test_suite");
-    JS::CallArgs args = JS::CallArgsFromVp(argc, vp);
-    JS::RootedObject obj(cx, args.thisv().toObjectOrNull());
-    JS::CallReceiver rec = JS::CallReceiverFromVp(vp);
-    if(argc == 0) {
-        if(ApplicationId.size() > 0) {
-
-            NSString *appID = [NSString stringWithUTF8String:ApplicationId.c_str()];
-            UIViewController *vc = [UIApplication.sharedApplication.keyWindow rootViewController];
-            [GoogleMobileAdsMediationTestSuite presentWithAppID:appID onViewController:vc delegate:nil];
-
-            rec.rval().set(JSVAL_TRUE);
-        } else {
-            rec.rval().set(JSVAL_FALSE);
-        }
         return true;
     } else {
         JS_ReportError(cx, "Invalid number of arguments");
@@ -651,7 +627,6 @@ void register_all_admob_framework(JSContext* cx, JS::HandleObject obj) {
     get_or_create_js_obj(cx, obj, "admob", &ns);
 
     JS_DefineFunction(cx, ns, "init", jsb_admob_init, 1, JSPROP_ENUMERATE | JSPROP_PERMANENT);
-    JS_DefineFunction(cx, ns, "launch_test_suite", jsb_admob_launch_test_suite, 0, JSPROP_ENUMERATE | JSPROP_PERMANENT);
     JS_DefineFunction(cx, ns, "add_test_device", jsb_admob_add_test_device, 1, JSPROP_ENUMERATE | JSPROP_PERMANENT);
 
     JS_DefineFunction(cx, ns, "load_banner", jsb_admob_load_banner, 3, JSPROP_ENUMERATE | JSPROP_PERMANENT);
