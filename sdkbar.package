@@ -6,7 +6,7 @@ sdkbox.copy_files(['ios/firebase_admob.framework', 'ios/GoogleMobileAds.framewor
 
 sdkbox.android_add_static_libraries(['admob'])
 sdkbox.android_add_calls(['import-module, ./admob'])
-sdkbar.gradle_dependencies(["implementation 'com.google.firebase:firebase-ads:17.1.2'", "implementation 'com.google.ads.mediation:chartboost:7.3.0.0'", "implementation 'com.google.ads.mediation:unity:3.0.0.0'", "implementation 'com.unity3d.ads:unity-ads:3.0.0'", "implementation 'com.google.ads.mediation:facebook:5.1.0.0'", "implementation 'com.facebook.android:audience-network-sdk:5.1.0'", "compile 'com.google.android.gms:play-services-ads:17.1.2'", "implementation 'com.my.target:mytarget-sdk:5.2.5'", "implementation 'com.google.ads.mediation:mytarget:5.2.5.0'"])
+sdkbar.gradle_dependencies(["implementation 'com.google.firebase:firebase-ads:17.2.0'", "implementation 'com.google.ads.mediation:chartboost:7.3.0.0'", "implementation 'com.google.ads.mediation:unity:3.0.0.0'", "implementation 'com.unity3d.ads:unity-ads:3.0.0'", "implementation 'com.google.ads.mediation:facebook:5.1.0.0'", "implementation 'com.facebook.android:audience-network-sdk:5.1.0'", "compile 'com.google.android.gms:play-services-ads:17.1.2'", "implementation 'com.my.target:mytarget-sdk:5.3.9'", "implementation 'com.google.ads.mediation:mytarget:5.3.9.0'"])
 
 sdkbox.xcode_add_sources(['AdMob.mm'])
 sdkbox.xcode_add_frameworks(['firebase_admob.framework', 'GoogleMobileAds.framework', 'GLKit.framework', 'MessageUI.framework', 'FacebookAdapter.framework', 'MyTargetAdapter.framework', 'FBAudienceNetwork.framework', 'MyTargetSDK.framework'])
